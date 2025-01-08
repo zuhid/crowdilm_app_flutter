@@ -1,21 +1,48 @@
+import 'package:crowdilm/api/quran_api.dart';
+import 'package:crowdilm/db/crowdilm_database.dart';
+import 'package:crowdilm/pages/quran_page.dart';
+import 'package:crowdilm/pages/setting_page.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-void main() {
-  runApp(const MyApp());
+import 'controllers/crowdilm_controller.dart';
+
+var database = CrowdilmDatabase();
+var quranApi = QuranApi();
+var crowdilmController = CrowdilmController(database, quranApi);
+Future main() async {
+  await database.open();
+  await crowdilmController.getQurans();
+  await crowdilmController.getLines();
+  await crowdilmController.getSuras();
+  await crowdilmController.getQuranLines('en.sahih');
+  await crowdilmController.getQuranLines('simple-clean');
+  runApp(const MainApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+final GoRouter _router = GoRouter(
+  routes: <RouteBase>[
+    GoRoute(
+      path: '/',
+      builder: (context, state) => const QuranPage(),
+      routes: <RouteBase>[
+        GoRoute(path: 'quran', builder: (context, state) => const QuranPage()),
+        GoRoute(
+            path: 'setting', builder: (context, state) => const SettingPage())
+      ],
+    ),
+  ],
+);
+
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const Text('Hello World'),
+    return MaterialApp.router(
+      routerConfig: _router,
+      theme: ThemeData(useMaterial3: true),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
