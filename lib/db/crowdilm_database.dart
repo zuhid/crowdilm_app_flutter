@@ -72,24 +72,16 @@ class CrowdilmDatabase {
 
   buildSetting() {
     database!.execute('''create table if not exists setting(
-  id integer not null
-, quran1 text not null
-, quran2 text not null
-, primary key(id)
+  key text not null
+, value text not null
+, primary key(key)
 );''');
   }
 
   addQurans(List<Quran> qurans) {
-    var query = database!.prepare(
-        'insert or ignore into quran(id, language, name, name_english, quran_type) values (?,?,?,?,?);');
+    var query = database!.prepare('insert or ignore into quran(id, language, name, name_english, quran_type) values (?,?,?,?,?);');
     for (var quran in qurans) {
-      query.execute([
-        quran.id,
-        quran.language,
-        quran.name,
-        quran.nameEnglish,
-        quran.quranType
-      ]);
+      query.execute([quran.id, quran.language, quran.name, quran.nameEnglish, quran.quranType]);
     }
   }
 
@@ -97,21 +89,18 @@ class CrowdilmDatabase {
     var resultSet = database!.select('select * from quran');
     List<Quran> qurans = [];
     for (var result in resultSet) {
-      qurans.add(Quran(result['id'], result['language'], result['name'],
-          result['name_english'], result['quran_type']));
+      qurans.add(Quran(result['id'], result['language'], result['name'], result['name_english'], result['quran_type']));
     }
     return qurans;
   }
 
   addLines(List<Line> lines) {
-    const queryString =
-        'insert or ignore into line(id, surah, aya, manzil, juz, hizb, ruku, page) values ';
+    const queryString = 'insert or ignore into line(id, surah, aya, manzil, juz, hizb, ruku, page) values ';
     var query = StringBuffer(queryString);
 
     for (var i = 0; i < lines.length; i++) {
       var line = lines[i];
-      query.write(
-          '(${line.id},${line.surah},${line.aya},${line.manzil},${line.juz},${line.hizb},${line.ruku},${line.page})');
+      query.write('(${line.id},${line.surah},${line.aya},${line.manzil},${line.juz},${line.hizb},${line.ruku},${line.page})');
       if (i % 100 == 0 || i == lines.length - 1) {
         database!.execute('${query.toString()};');
         query = StringBuffer(queryString);
@@ -125,22 +114,13 @@ class CrowdilmDatabase {
     var resultSet = database!.select('select * from line');
     List<Line> lines = [];
     for (var result in resultSet) {
-      lines.add(Line(
-          result['id'],
-          result['surah'],
-          result['aya'],
-          result['manzil'],
-          result['juz'],
-          result['hizb'],
-          result['ruku'],
-          result['page']));
+      lines.add(Line(result['id'], result['surah'], result['aya'], result['manzil'], result['juz'], result['hizb'], result['ruku'], result['page']));
     }
     return lines;
   }
 
   addQuranLines(List<QuranLine> quranlines) {
-    const queryString =
-        'insert or ignore into quran_line(quran_id, line_id, text) values ';
+    const queryString = 'insert or ignore into quran_line(quran_id, line_id, text) values ';
     var query = StringBuffer(queryString);
 
     for (var i = 0; i < quranlines.length; i++) {
@@ -156,12 +136,10 @@ class CrowdilmDatabase {
   }
 
   List<QuranLine> getQuranLines(String quranId) {
-    var resultSet = database!
-        .select('select * from quran_line where quran_id=?', [quranId]);
+    var resultSet = database!.select('select * from quran_line where quran_id=?', [quranId]);
     List<QuranLine> quranlines = [];
     for (var result in resultSet) {
-      quranlines.add(
-          QuranLine(result['quran_id'], result['line_id'], result['text']));
+      quranlines.add(QuranLine(result['quran_id'], result['line_id'], result['text']));
     }
     return quranlines;
   }
@@ -181,24 +159,16 @@ order by quran_line.line_id
 ''', [pageId]);
     List<Aya> ayas = [];
     for (var result in resultSet) {
-      ayas.add(Aya(result['quran_id'], result['line_id'], result['surah'],
-          result['aya'], result['text']));
+      ayas.add(Aya(result['quran_id'], result['line_id'], result['surah'], result['aya'], result['text']));
     }
     return ayas;
   }
 
   addSuras(List<Sura> suras) {
-    var query = database!.prepare(
-        'insert or ignore into sura(id, ayas, name_arabic, name_english, revelation_city, revelation_order) values (?,?,?,?,?,?);');
+    var query =
+        database!.prepare('insert or ignore into sura(id, ayas, name_arabic, name_english, revelation_city, revelation_order) values (?,?,?,?,?,?);');
     for (var sura in suras) {
-      query.execute([
-        sura.id,
-        sura.ayas,
-        sura.nameArabic,
-        sura.nameEnglish,
-        sura.revelationCity,
-        sura.revelationOrder
-      ]);
+      query.execute([sura.id, sura.ayas, sura.nameArabic, sura.nameEnglish, sura.revelationCity, sura.revelationOrder]);
     }
   }
 
@@ -206,20 +176,25 @@ order by quran_line.line_id
     var resultSet = database!.select('select * from sura');
     List<Sura> suras = [];
     for (var result in resultSet) {
-      suras.add(Sura(
-          result['id'],
-          result['ayas'],
-          result['name_arabic'],
-          result['name_english'],
-          result['revelation_city'],
-          result['revelation_order']));
+      suras.add(
+          Sura(result['id'], result['ayas'], result['name_arabic'], result['name_english'], result['revelation_city'], result['revelation_order']));
     }
     return suras;
   }
 
-  void saveSetting(Setting setting) {
-    database!.execute(
-        'insert or replace into setting(id, quran1, quran2) values (?,?,?);',
-        [1, setting.quran1, setting.quran2]);
+  List<Setting> getSettings() {
+    var resultSet = database!.select('select * from setting');
+    List<Setting> settings = [];
+    for (var result in resultSet) {
+      settings.add(Setting(result['key'], result['value']));
+    }
+    return settings;
+  }
+
+  void saveSettings(Map<String, String> settings) {
+    var query = database!.prepare('insert or replace into setting(key, value) values (?,?);');
+    settings.forEach((key, value) {
+      query.execute([key, value]);
+    });
   }
 }

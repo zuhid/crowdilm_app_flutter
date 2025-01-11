@@ -57,7 +57,7 @@ class CrowdilmController {
     return list;
   }
 
-  void saveSetting(Setting setting) {
-    database.saveSetting(setting);
+  void saveSettings(Map<String, String> settings) {
+    database.saveSettings(settings);
   }
 }

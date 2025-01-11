@@ -16,11 +16,13 @@ class SettingPage extends StatefulWidget {
 
 class _SettingPageState extends State<SettingPage> {
   var quranList = <String>['quran 1', 'quran 2'];
+  Map<String, String> settings = {
+    'quran1': 'en.sahih',
+    'quran2': 'simple-clean',
+  };
 
   static Future<List<MyDropdownItem>> get qurans async {
-    return (await crowdilmController.getQurans())
-        .map<MyDropdownItem>((quran) => MyDropdownItem(quran.id, quran.name))
-        .toList();
+    return (await crowdilmController.getQurans()).map<MyDropdownItem>((quran) => MyDropdownItem(quran.id, quran.name)).toList();
   }
 
   @override
@@ -28,11 +30,18 @@ class _SettingPageState extends State<SettingPage> {
     return Scaffold(
       appBar: AppBar(title: Text("Setting")),
       body: ListView(children: [
-        // for (var quran in quranList)
-        //   MyDropdown(label: quran, futureData: qurans),
-        MyDropdown(label: 'Quran', futureData: qurans),
+        MyDropdown(
+          label: 'Quran 1',
+          futureData: qurans,
+          onChanged: (value) => settings["quran1"] = value,
+        ),
+        MyDropdown(
+          label: 'Quran 2',
+          futureData: qurans,
+          onChanged: (value) => settings["quran2"] = value,
+        ),
         MyButton('Save', () {
-          crowdilmController.saveSetting(Setting('en.sahih', 'simple-clean'));
+          crowdilmController.saveSettings(settings);
           context.go('/quran');
         }),
       ]),
