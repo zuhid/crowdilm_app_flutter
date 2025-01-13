@@ -10,7 +10,7 @@
     "editor.formatOnSave": true,
     "editor.insertSpaces": true,
     "editor.tabSize": 2,
-    // "explorer.excludeGitIgnore": true,
+    "explorer.excludeGitIgnore": true,
     "[dart]": {
         "editor.rulers": [
             150
