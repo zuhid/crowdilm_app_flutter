@@ -15,27 +15,6 @@ CrowdIlm appliation written in flutter
 - `flutter run --device-id chrome` to run the the app chrome browser
 - `flutter run --device-id emulator-5554` to run the the app medium phone
 
-# To clean and rebuild all the fiels
-```
-rm -rf .dart_tool
-rm -rf .idea
-rm -rf android
-rm -rf build
-rm -rf ios
-rm -rf linux
-rm -rf macos
-rm -rf web
-rm -rf windows
-rm -rf analysis_options.yaml
-rm -rf crowdilm.iml
-rm -rf pubspec.lock
-rm -rf .metadata
-rm -rf .dart_tool
-
-flutter clean
-flutter create .
-```
-
 
 # [Publish](https://docs.flutter.dev/deployment/android)
 ```

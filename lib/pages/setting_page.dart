@@ -14,10 +14,11 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-  Map<String, String> settings = {
-    'quran1': 'en.sahih',
-    'quran2': 'simple',
-  };
+  Map<String, String> _settings = {};
+
+  _SettingPageState() {
+    _settings = crowdilmController.getSettings();
+  }
 
   static Future<List<MyDropdownItem>> get qurans async {
     return (await crowdilmController.getQurans())
@@ -25,27 +26,51 @@ class _SettingPageState extends State<SettingPage> {
         .toList();
   }
 
+  static Future<List<MyDropdownItem>> get paging async {
+    return Future.value([
+      MyDropdownItem('surah', 'surah'),
+      MyDropdownItem('page', 'page'),
+      MyDropdownItem('ruku', 'ruku'),
+      MyDropdownItem('hizb', 'hizb'),
+      MyDropdownItem('juz', 'juz'),
+      MyDropdownItem('manzil', 'manzil'),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Setting")),
       body: ListView(children: [
-        MyDropdown(
-          label: 'Quran 1',
-          futureData: qurans,
-          onChanged: (value) => settings["quran1"] = value,
-        ),
-        MyDropdown(
-          label: 'Quran 2',
-          futureData: qurans,
-          onChanged: (value) => settings["quran2"] = value,
-        ),
+        MyDropdown(label: 'Quran 1', selectedValue: _settings["quran1"], futureData: qurans, onChanged: (value) => _settings["quran1"] = value),
+        Slider(
+            value: double.parse(_settings['quran1Size'] ?? '10.0'),
+            min: 0,
+            max: 100,
+            divisions: 25,
+            label: _settings['quran1Size'],
+            onChanged: (value) {
+              setState(() {
+                _settings["quran1Size"] = value.toString();
+              });
+            }),
+        MyDropdown(label: 'Quran 2', selectedValue: _settings["quran2"], futureData: qurans, onChanged: (value) => _settings["quran2"] = value),
+        Slider(
+            value: double.parse(_settings['quran2Size'] ?? '10.0'),
+            min: 0,
+            max: 100,
+            divisions: 25,
+            label: _settings['quran2Size'],
+            onChanged: (value) {
+              setState(() {
+                _settings["quran2Size"] = value.toString();
+              });
+            }),
+        MyDropdown(label: 'Paging', selectedValue: _settings["paging"], futureData: paging, onChanged: (value) => _settings["paging"] = value),
         MyButton('Save', () async {
-          crowdilmController.saveSettings(settings);
-          var quran = settings["quran1"];
-          await crowdilmController.getQuranLines(quran!);
-          quran = settings["quran2"];
-          await crowdilmController.getQuranLines(quran!);
+          crowdilmController.saveSettings(_settings);
+          await crowdilmController.getQuranLines(_settings["quran1"]!);
+          await crowdilmController.getQuranLines(_settings["quran2"]!);
           if (context.mounted) {
             context.go('/quran');
           }

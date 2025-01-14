@@ -143,7 +143,7 @@ class CrowdilmDatabase {
     return quranlines;
   }
 
-  List<Aya> getAya(int pageId) {
+  List<Aya> getAya(String paging, int pageId) {
     var resultSet = database!.select('''
 select
   quran_line.quran_id
@@ -153,7 +153,7 @@ select
 , quran_line.text
 from quran_line
 	inner join line on quran_line.line_id = line.id
-where line.hizb = ?
+where line.$paging = ?
 order by quran_line.line_id
 ''', [pageId]);
     List<Aya> ayas = [];

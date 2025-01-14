@@ -42,8 +42,8 @@ class CrowdilmController {
     return list;
   }
 
-  List<Aya> getAya(int pageId) {
-    return database.getAya(pageId);
+  List<Aya> getAya(String paging, int pageId) {
+    return database.getAya(paging, pageId);
   }
 
   Future<List<Sura>> getSuras() async {

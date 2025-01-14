@@ -1,20 +1,20 @@
 import 'package:crowdilm/controls/my_dropdown_item.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class MyDropdown extends StatefulWidget {
   final String label;
   final Future<List<MyDropdownItem>>? futureData;
   final ValueChanged<String>? onChanged;
+  String? selectedValue;
 
-  const MyDropdown({super.key, required this.label, required this.futureData, this.onChanged});
+  MyDropdown({super.key, required this.label, this.selectedValue, required this.futureData, this.onChanged});
 
   @override
   State<MyDropdown> createState() => _MyDropdownState();
 }
 
 class _MyDropdownState extends State<MyDropdown> {
-  String? _selectedValue;
-
   List<DropdownMenuItem<String>> _items(List<MyDropdownItem>? myDropdownItems) {
     if (myDropdownItems != null) {
       return myDropdownItems.map((item) => DropdownMenuItem(value: item.value, child: Text(item.text))).toList();
@@ -31,10 +31,10 @@ class _MyDropdownState extends State<MyDropdown> {
             future: widget.futureData,
             builder: (context, snapshot) => DropdownButton<String>(
                   items: _items(snapshot.data),
-                  value: _selectedValue,
+                  value: widget.selectedValue,
                   onChanged: (String? value) => setState(() {
-                    _selectedValue = value ?? '';
-                    widget.onChanged!(_selectedValue ?? '');
+                    widget.selectedValue = value ?? '';
+                    widget.onChanged!(widget.selectedValue ?? '');
                   }),
                 ))
       ],
