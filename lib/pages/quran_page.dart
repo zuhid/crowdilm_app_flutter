@@ -40,55 +40,58 @@ class _QuranPageState extends State<QuranPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.grey,
+        backgroundColor: const Color.fromARGB(255, 24, 24, 24),
         body: Column(children: [
-          Container(
-            color: Colors.black87,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                    icon: Icon(Icons.arrow_back, color: Colors.white, size: 24.0, semanticLabel: 'Settings'),
-                    onPressed: () => setState(() {
-                          pageIndex++;
-                          _settings['pageIndex'] = pageIndex.toString();
-                          crowdilmController.saveSettings(_settings);
-                        })),
-                Text('${_settings['paging']?.capitalize() ?? ''}  ', textAlign: TextAlign.center, style: TextStyle(color: Colors.white)),
-                SizedBox(
-                  width: 40,
-                  height: 50,
-                  child: TextFormField(
-                    key: Key('page$pageIndex'),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
-                    style: TextStyle(fontSize: 15.0, color: Colors.white),
-                    decoration: const InputDecoration(fillColor: Colors.white),
-                    initialValue: pageIndex.toString(),
-                    onChanged: (value) => setState(() {
-                      pageIndex = int.tryParse(value) ?? 0;
-                      _settings['pageIndex'] = pageIndex.toString();
-                      crowdilmController.saveSettings(_settings);
-                    }),
-                  ),
-                ),
-                IconButton(
-                    icon: Icon(Icons.arrow_forward, color: Colors.white, size: 24.0, semanticLabel: 'Settings'),
-                    onPressed: () => setState(() {
-                          pageIndex--;
-                          _settings['pageIndex'] = pageIndex.toString();
-                          crowdilmController.saveSettings(_settings);
-                        })),
-                IconButton(
-                    icon: Icon(Icons.settings, color: Colors.white, size: 24.0, semanticLabel: 'Settings'), onPressed: () => context.go('/setting')),
-              ],
-            ),
-          ),
           Expanded(
             child: ListView(
               key: Key(pageIndex.toString()),
               children: [for (var quranLine in getQuranLines()) quranLine],
             ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(''),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                      icon: Icon(Icons.arrow_back, color: Colors.white, size: 24.0, semanticLabel: 'Settings'),
+                      onPressed: () => setState(() {
+                            pageIndex++;
+                            _settings['pageIndex'] = pageIndex.toString();
+                            crowdilmController.saveSettings(_settings);
+                          })),
+                  SizedBox(
+                    width: 40,
+                    height: 45,
+                    child: TextFormField(
+                      key: Key('page$pageIndex'),
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+                      style: TextStyle(fontSize: 15.0, color: Colors.white),
+                      decoration: const InputDecoration(fillColor: Colors.white),
+                      initialValue: pageIndex.toString(),
+                      textAlign: TextAlign.center,
+                      onChanged: (value) => setState(() {
+                        pageIndex = int.tryParse(value) ?? 0;
+                        _settings['pageIndex'] = pageIndex.toString();
+                        crowdilmController.saveSettings(_settings);
+                      }),
+                    ),
+                  ),
+                  IconButton(
+                      icon: Icon(Icons.arrow_forward, color: Colors.white, size: 24.0, semanticLabel: 'Settings'),
+                      onPressed: () => setState(() {
+                            pageIndex--;
+                            _settings['pageIndex'] = pageIndex.toString();
+                            crowdilmController.saveSettings(_settings);
+                          })),
+                ],
+              ),
+              IconButton(
+                  icon: Icon(Icons.settings, color: Colors.white, size: 24.0, semanticLabel: 'Settings'), onPressed: () => context.go('/setting')),
+            ],
           ),
         ]));
   }
@@ -109,9 +112,9 @@ class _QuranItem extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.black,
-        borderRadius: BorderRadius.circular(5.0),
+        borderRadius: BorderRadius.circular(10.0),
       ),
-      margin: const EdgeInsets.all(1.0),
+      margin: const EdgeInsets.all(1.5),
       child: Column(
         children: [
           if (surah != 9 && ayaNumber == 1)

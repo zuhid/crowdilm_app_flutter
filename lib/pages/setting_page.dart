@@ -28,53 +28,81 @@ class _SettingPageState extends State<SettingPage> {
 
   static Future<List<MyDropdownItem>> get paging async {
     return Future.value([
-      MyDropdownItem('surah', 'surah'),
-      MyDropdownItem('page', 'page'),
-      MyDropdownItem('ruku', 'ruku'),
-      MyDropdownItem('hizb', 'hizb'),
-      MyDropdownItem('juz', 'juz'),
-      MyDropdownItem('manzil', 'manzil'),
+      MyDropdownItem('surah', 'Surah'),
+      MyDropdownItem('page', 'Page'),
+      MyDropdownItem('ruku', 'Ruku'),
+      MyDropdownItem('hizb', 'Hizb'),
+      MyDropdownItem('juz', 'Juz'),
+      MyDropdownItem('manzil', 'Manzil'),
     ]);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Setting")),
-      body: ListView(children: [
-        MyDropdown(label: 'Quran 1', selectedValue: _settings["quran1"], futureData: qurans, onChanged: (value) => _settings["quran1"] = value),
-        Slider(
-            value: double.parse(_settings['quran1Size'] ?? '10.0'),
-            min: 0,
-            max: 100,
-            divisions: 25,
-            label: _settings['quran1Size'],
-            onChanged: (value) {
-              setState(() {
-                _settings["quran1Size"] = value.toString();
-              });
-            }),
-        MyDropdown(label: 'Quran 2', selectedValue: _settings["quran2"], futureData: qurans, onChanged: (value) => _settings["quran2"] = value),
-        Slider(
-            value: double.parse(_settings['quran2Size'] ?? '10.0'),
-            min: 0,
-            max: 100,
-            divisions: 25,
-            label: _settings['quran2Size'],
-            onChanged: (value) {
-              setState(() {
-                _settings["quran2Size"] = value.toString();
-              });
-            }),
-        MyDropdown(label: 'Paging', selectedValue: _settings["paging"], futureData: paging, onChanged: (value) => _settings["paging"] = value),
-        MyButton('Save', () async {
-          crowdilmController.saveSettings(_settings);
-          await crowdilmController.getQuranLines(_settings["quran1"]!);
-          await crowdilmController.getQuranLines(_settings["quran2"]!);
-          if (context.mounted) {
-            context.go('/quran');
-          }
-        }),
+      appBar: AppBar(
+        title: Text("Setting"),
+        titleTextStyle: TextStyle(color: Colors.white),
+        centerTitle: true,
+        backgroundColor: const Color.fromARGB(255, 24, 24, 24),
+      ),
+      backgroundColor: const Color.fromARGB(255, 24, 24, 24),
+      body: Column(children: [
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.black,
+            ),
+            child: Column(
+              children: [
+                MyDropdown(
+                    label: 'Quran  ', selectedValue: _settings["quran1"], futureData: qurans, onChanged: (value) => _settings["quran1"] = value),
+                Slider(
+                    value: double.parse(_settings['quran1Size'] ?? '10.0'),
+                    min: 0,
+                    max: 100,
+                    divisions: 25,
+                    label: _settings['quran1Size'],
+                    onChanged: (value) {
+                      setState(() {
+                        _settings["quran1Size"] = value.toString();
+                      });
+                    }),
+                MyDropdown(
+                    label: 'Quran  ', selectedValue: _settings["quran2"], futureData: qurans, onChanged: (value) => _settings["quran2"] = value),
+                Slider(
+                    value: double.parse(_settings['quran2Size'] ?? '10.0'),
+                    min: 0,
+                    max: 100,
+                    divisions: 25,
+                    label: _settings['quran2Size'],
+                    onChanged: (value) {
+                      setState(() {
+                        _settings["quran2Size"] = value.toString();
+                      });
+                    }),
+                MyDropdown(
+                    label: 'Paging  ', selectedValue: _settings["paging"], futureData: paging, onChanged: (value) => _settings["paging"] = value),
+              ],
+            ),
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            IconButton(
+              icon: Icon(Icons.save, color: Colors.white, size: 24.0, semanticLabel: 'Settings'),
+              onPressed: () async {
+                crowdilmController.saveSettings(_settings);
+                await crowdilmController.getQuranLines(_settings["quran1"]!);
+                await crowdilmController.getQuranLines(_settings["quran2"]!);
+                if (context.mounted) {
+                  context.go('/quran');
+                }
+              },
+            ),
+          ],
+        )
       ]),
     );
   }

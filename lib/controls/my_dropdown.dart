@@ -26,17 +26,24 @@ class _MyDropdownState extends State<MyDropdown> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text(widget.label),
+        Text(widget.label, style: TextStyle(color: Colors.white, fontFamily: 'Scheherazade', fontSize: 25)),
         FutureBuilder(
-            future: widget.futureData,
-            builder: (context, snapshot) => DropdownButton<String>(
-                  items: _items(snapshot.data),
-                  value: widget.selectedValue,
-                  onChanged: (String? value) => setState(() {
-                    widget.selectedValue = value ?? '';
-                    widget.onChanged!(widget.selectedValue ?? '');
-                  }),
-                ))
+          future: widget.futureData,
+          builder: (context, snapshot) => Theme(
+            data: Theme.of(context).copyWith(
+              canvasColor: Colors.black,
+            ),
+            child: DropdownButton<String>(
+              items: _items(snapshot.data),
+              value: widget.selectedValue,
+              style: TextStyle(color: Colors.white, fontFamily: 'Scheherazade', fontSize: 25),
+              onChanged: (String? value) => setState(() {
+                widget.selectedValue = value ?? '';
+                widget.onChanged!(widget.selectedValue ?? '');
+              }),
+            ),
+          ),
+        )
       ],
     );
   }

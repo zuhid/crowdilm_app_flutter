@@ -15,6 +15,8 @@ CrowdIlm appliation written in flutter
 - `flutter run --device-id chrome` to run the the app chrome browser
 - `flutter run --device-id emulator-5554` to run the the app medium phone
 
+# If uninstall fails 
+- https://stackoverflow.com/questions/53271576/after-uninstall-app-on-device-flutter-run-not-work
 
 # [Publish](https://docs.flutter.dev/deployment/android)
 ```

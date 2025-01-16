@@ -21,7 +21,6 @@ class CrowdilmDatabase {
   }
 
   buildLine() {
-    database!.execute('drop table if exists line;');
     database!.execute('''create table if not exists line(
   id integer not null
 , surah integer not null
@@ -110,7 +109,7 @@ class CrowdilmDatabase {
   }
 
   List<Line> getLines() {
-    var resultSet = database!.select('select * from line');
+    var resultSet = database!.select('select * from line;');
     List<Line> lines = [];
     for (var result in resultSet) {
       lines.add(Line(result['id'], result['surah'], result['aya'], result['manzil'], result['juz'], result['hizb'], result['ruku'], result['page']));

@@ -1,6 +1,6 @@
 name: crowdilm
 description: "A new Flutter project."
-version: 0.2.9+9
+version: 0.2.16+16
 environment:
   sdk: ^3.6.0
 dependencies:
@@ -22,7 +22,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/icons/favicon.ico
+    - assets/icons/ci.png
   fonts:
     - family: Scheherazade
       fonts:
@@ -30,17 +30,17 @@ flutter:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/icons/favicon.ico"
+  image_path: "assets/icons/ci.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
   web:
     generate: true
-    image_path: "assets/icons/favicon.ico"
+    image_path: "assets/icons/ci.png"
     background_color: "#hexcode"
     theme_color: "#hexcode"
   windows:
     generate: true
-    image_path: "assets/icons/favicon.ico"
+    image_path: "assets/icons/ci.png"
     icon_size: 48 # min:48, max:256, default: 48
   macos:
     generate: true
-    image_path: "assets/icons/favicon.ico"
+    image_path: "assets/icons/ci.png"
